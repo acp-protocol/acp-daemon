@@ -48,6 +48,11 @@ pub fn create_router(state: AppState) -> Router {
         // Variable expansion
         .route("/vars/{name}/expand", get(api::vars::expand_variable))
 
+        // Aggregate endpoints
+        .route("/stats", get(api::stats::get_stats))
+        .route("/map", get(api::map::get_map))
+        .route("/primer", get(api::primer::get_primer))
+
         // Add middleware
         .layer(TraceLayer::new_for_http())
         .layer(

@@ -12,3 +12,6 @@ pub mod files;
 pub mod graph;
 pub mod domains;
 pub mod constraints;
+pub mod stats;
+pub mod map;
+pub mod primer;

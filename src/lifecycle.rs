@@ -86,7 +86,11 @@ pub fn stop_daemon(project_root: impl AsRef<Path>) -> anyhow::Result<()> {
 
                     match signal::kill(Pid::from_raw(pid as i32), Signal::SIGTERM) {
                         Ok(_) => {
-                            println!("{} Sent SIGTERM to daemon (PID {})", style("✓").green(), pid);
+                            println!(
+                                "{} Sent SIGTERM to daemon (PID {})",
+                                style("✓").green(),
+                                pid
+                            );
                         }
                         Err(e) => {
                             println!("{} Failed to stop daemon: {}", style("✗").red(), e);
@@ -97,10 +101,16 @@ pub fn stop_daemon(project_root: impl AsRef<Path>) -> anyhow::Result<()> {
 
                 #[cfg(not(unix))]
                 {
-                    println!("{} Stopping daemon not supported on this platform", style("✗").red());
+                    println!(
+                        "{} Stopping daemon not supported on this platform",
+                        style("✗").red()
+                    );
                 }
             } else {
-                println!("{} Daemon not running (stale PID file)", style("!").yellow());
+                println!(
+                    "{} Daemon not running (stale PID file)",
+                    style("!").yellow()
+                );
             }
 
             // Remove PID file
@@ -129,7 +139,10 @@ pub fn check_status(project_root: impl AsRef<Path>) -> anyhow::Result<()> {
                     println!("  Health: {}", resp);
                 }
             } else {
-                println!("{} Daemon not running (stale PID file)", style("!").yellow());
+                println!(
+                    "{} Daemon not running (stale PID file)",
+                    style("!").yellow()
+                );
                 let _ = fs::remove_file(&pid_path);
             }
         }

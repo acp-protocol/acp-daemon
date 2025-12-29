@@ -10,8 +10,8 @@ use axum::{
 };
 use serde::Serialize;
 
-use acp::cache::DomainEntry;
 use crate::state::AppState;
+use acp::cache::DomainEntry;
 
 #[derive(Serialize)]
 pub struct DomainListResponse {
@@ -20,14 +20,10 @@ pub struct DomainListResponse {
 }
 
 /// GET /domains - List all domains
-pub async fn list_domains(
-    State(state): State<AppState>,
-) -> Json<DomainListResponse> {
+pub async fn list_domains(State(state): State<AppState>) -> Json<DomainListResponse> {
     let cache = state.cache_async().await;
 
-    let domains: Vec<DomainEntry> = cache.domains.values()
-        .cloned()
-        .collect();
+    let domains: Vec<DomainEntry> = cache.domains.values().cloned().collect();
 
     let total = domains.len();
 
@@ -41,7 +37,9 @@ pub async fn get_domain(
 ) -> Result<Json<DomainEntry>, StatusCode> {
     let cache = state.cache_async().await;
 
-    cache.domains.get(&name)
+    cache
+        .domains
+        .get(&name)
         .cloned()
         .map(Json)
         .ok_or(StatusCode::NOT_FOUND)

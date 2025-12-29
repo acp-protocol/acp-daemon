@@ -10,8 +10,8 @@ use axum::{
 };
 use serde::{Deserialize, Serialize};
 
-use acp::cache::SymbolEntry;
 use crate::state::AppState;
+use acp::cache::SymbolEntry;
 
 #[derive(Deserialize)]
 pub struct SymbolQuery {
@@ -39,19 +39,23 @@ pub async fn list_symbols(
 ) -> Json<SymbolListResponse> {
     let cache = state.cache_async().await;
 
-    let mut symbols: Vec<SymbolEntry> = cache.symbols.values()
+    let mut symbols: Vec<SymbolEntry> = cache
+        .symbols
+        .values()
         .filter(|s| {
-            let file_match = query.file.as_ref()
+            let file_match = query
+                .file
+                .as_ref()
                 .map(|f| s.file.contains(f))
                 .unwrap_or(true);
 
-            let type_match = query.symbol_type.as_ref()
+            let type_match = query
+                .symbol_type
+                .as_ref()
                 .map(|t| format!("{:?}", s.symbol_type).to_lowercase() == t.to_lowercase())
                 .unwrap_or(true);
 
-            let exported_match = query.exported
-                .map(|e| s.exported == e)
-                .unwrap_or(true);
+            let exported_match = query.exported.map(|e| s.exported == e).unwrap_or(true);
 
             file_match && type_match && exported_match
         })
@@ -74,7 +78,9 @@ pub async fn get_symbol(
 ) -> Result<Json<SymbolEntry>, StatusCode> {
     let cache = state.cache_async().await;
 
-    cache.symbols.get(&name)
+    cache
+        .symbols
+        .get(&name)
         .cloned()
         .map(Json)
         .ok_or(StatusCode::NOT_FOUND)

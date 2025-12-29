@@ -10,8 +10,8 @@ use axum::{
 };
 use serde::{Deserialize, Serialize};
 
-use acp::cache::FileEntry;
 use crate::state::AppState;
+use acp::cache::FileEntry;
 
 #[derive(Deserialize)]
 pub struct FileQuery {
@@ -38,17 +38,25 @@ pub async fn list_files(
 ) -> Json<FileListResponse> {
     let cache = state.cache_async().await;
 
-    let mut files: Vec<FileEntry> = cache.files.values()
+    let mut files: Vec<FileEntry> = cache
+        .files
+        .values()
         .filter(|f| {
-            let lang_match = query.language.as_ref()
+            let lang_match = query
+                .language
+                .as_ref()
                 .map(|l| format!("{:?}", f.language).to_lowercase() == l.to_lowercase())
                 .unwrap_or(true);
 
-            let domain_match = query.domain.as_ref()
+            let domain_match = query
+                .domain
+                .as_ref()
                 .map(|d| f.domains.iter().any(|fd| fd.contains(d)))
                 .unwrap_or(true);
 
-            let layer_match = query.layer.as_ref()
+            let layer_match = query
+                .layer
+                .as_ref()
                 .map(|l| f.layer.as_ref().map(|fl| fl == l).unwrap_or(false))
                 .unwrap_or(true);
 

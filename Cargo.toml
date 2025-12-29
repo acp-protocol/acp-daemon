@@ -14,9 +14,9 @@ name = "acpd"
 path = "src/main.rs"
 
 [dependencies]
-# Core ACP library (use local path for development, git for release)
-acp = { path = "../acp-cli" }
-# acp = { git = "https://github.com/acp-protocol/acp-cli" }
+# Core ACP library (use local path for development, version for release)
+# acp = { path = "../acp-cli", package = "acp-protocol" }
+acp = { version = "0.3.0", package = "acp-protocol" }
 
 # HTTP server
 axum = "0.8"

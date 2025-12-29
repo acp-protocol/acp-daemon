@@ -3,18 +3,13 @@
 //! @acp:domain daemon
 //! @acp:layer api
 
-use axum::{
-    extract::State,
-    Json,
-};
+use axum::{extract::State, Json};
 
-use acp::config::Config;
 use crate::state::AppState;
+use acp::config::Config;
 
 /// GET /config - Return config JSON
-pub async fn get_config(
-    State(state): State<AppState>,
-) -> Json<Config> {
+pub async fn get_config(State(state): State<AppState>) -> Json<Config> {
     let config = state.config().await;
     Json(config.clone())
 }

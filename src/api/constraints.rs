@@ -10,8 +10,8 @@ use axum::{
 };
 use serde::Serialize;
 
-use acp::constraints::Constraints;
 use crate::state::AppState;
+use acp::constraints::Constraints;
 
 #[derive(Serialize)]
 pub struct ConstraintResponse {
@@ -34,12 +34,16 @@ pub async fn get_constraints(
         let file_constraints = constraint_index.by_file.get(path_normalized).cloned();
 
         // Check lock level
-        let lock = if constraint_index.by_lock_level.get("frozen")
+        let lock = if constraint_index
+            .by_lock_level
+            .get("frozen")
             .map(|files| files.iter().any(|f| f == path_normalized))
             .unwrap_or(false)
         {
             Some("frozen".to_string())
-        } else if constraint_index.by_lock_level.get("restricted")
+        } else if constraint_index
+            .by_lock_level
+            .get("restricted")
             .map(|files| files.iter().any(|f| f == path_normalized))
             .unwrap_or(false)
         {

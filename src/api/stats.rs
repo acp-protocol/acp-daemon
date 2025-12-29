@@ -3,10 +3,7 @@
 //! @acp:domain daemon
 //! @acp:layer api
 
-use axum::{
-    extract::State,
-    Json,
-};
+use axum::{extract::State, Json};
 use serde::Serialize;
 
 use crate::state::AppState;
@@ -21,9 +18,7 @@ pub struct StatsResponse {
 }
 
 /// GET /stats - Get project statistics
-pub async fn get_stats(
-    State(state): State<AppState>,
-) -> Json<StatsResponse> {
+pub async fn get_stats(State(state): State<AppState>) -> Json<StatsResponse> {
     let cache = state.cache_async().await;
 
     Json(StatsResponse {

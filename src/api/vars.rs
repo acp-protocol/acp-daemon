@@ -10,13 +10,11 @@ use axum::{
 };
 use serde::Serialize;
 
-use acp::vars::VarsFile;
 use crate::state::AppState;
+use acp::vars::VarsFile;
 
 /// GET /vars - Return vars JSON
-pub async fn get_vars(
-    State(state): State<AppState>,
-) -> Result<Json<VarsFile>, StatusCode> {
+pub async fn get_vars(State(state): State<AppState>) -> Result<Json<VarsFile>, StatusCode> {
     let vars = state.vars().await;
     match vars.as_ref() {
         Some(v) => Ok(Json(v.clone())),

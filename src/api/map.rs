@@ -3,12 +3,12 @@
 //! @acp:domain daemon
 //! @acp:layer api
 
-use std::collections::BTreeMap;
 use axum::{
     extract::{Query, State},
     Json,
 };
 use serde::{Deserialize, Serialize};
+use std::collections::BTreeMap;
 
 use crate::state::AppState;
 
@@ -105,7 +105,14 @@ pub async fn get_map(
                         .iter()
                         .map(|child| {
                             let child_name = child.rsplit('/').next().unwrap_or(child);
-                            build_node(child_name, child, dir_tree, file_symbols, depth + 1, max_depth)
+                            build_node(
+                                child_name,
+                                child,
+                                dir_tree,
+                                file_symbols,
+                                depth + 1,
+                                max_depth,
+                            )
                         })
                         .collect(),
                 )

@@ -114,19 +114,20 @@ pub async fn get_primer(
             .iter()
             .filter(|cmd| {
                 cmd.capabilities.is_empty()
-                    || cmd.capabilities.iter().any(|cap| capabilities.contains(&cap.to_string()))
+                    || cmd
+                        .capabilities
+                        .iter()
+                        .any(|cap| capabilities.contains(&cap.to_string()))
             })
             .collect()
     };
 
     // Sort by (critical desc, priority asc)
     let mut sorted_commands = filtered_commands;
-    sorted_commands.sort_by(|a, b| {
-        match (a.critical, b.critical) {
-            (true, false) => Ordering::Less,
-            (false, true) => Ordering::Greater,
-            _ => a.priority.cmp(&b.priority),
-        }
+    sorted_commands.sort_by(|a, b| match (a.critical, b.critical) {
+        (true, false) => Ordering::Less,
+        (false, true) => Ordering::Greater,
+        _ => a.priority.cmp(&b.priority),
     });
 
     // Calculate remaining budget after bootstrap
@@ -140,7 +141,11 @@ pub async fn get_primer(
     for cmd in sorted_commands {
         // Get the appropriate tier level
         let tier_level = match tier {
-            Tier::Full => cmd.full.as_ref().or(cmd.standard.as_ref()).unwrap_or(&cmd.minimal),
+            Tier::Full => cmd
+                .full
+                .as_ref()
+                .or(cmd.standard.as_ref())
+                .unwrap_or(&cmd.minimal),
             Tier::Standard => cmd.standard.as_ref().unwrap_or(&cmd.minimal),
             Tier::Minimal => &cmd.minimal,
         };

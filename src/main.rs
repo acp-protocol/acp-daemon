@@ -15,12 +15,12 @@ use std::net::SocketAddr;
 use std::path::PathBuf;
 
 use clap::{Parser, Subcommand};
-use tracing::{info, error};
+use tracing::{error, info};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
-mod server;
-mod lifecycle;
 mod api;
+mod lifecycle;
+mod server;
 mod state;
 
 /// ACP Daemon - Background service for codebase intelligence
@@ -72,9 +72,9 @@ async fn main() -> anyhow::Result<()> {
     init_logging(&cli.log_level);
 
     // Determine project root
-    let project_root = cli.directory.unwrap_or_else(|| {
-        std::env::current_dir().expect("Failed to get current directory")
-    });
+    let project_root = cli
+        .directory
+        .unwrap_or_else(|| std::env::current_dir().expect("Failed to get current directory"));
 
     match cli.command {
         Some(Commands::Start { foreground }) => {
@@ -84,12 +84,8 @@ async fn main() -> anyhow::Result<()> {
                 lifecycle::start_daemon(project_root, cli.port)
             }
         }
-        Some(Commands::Stop) => {
-            lifecycle::stop_daemon(&project_root)
-        }
-        Some(Commands::Status) => {
-            lifecycle::check_status(&project_root)
-        }
+        Some(Commands::Stop) => lifecycle::stop_daemon(&project_root),
+        Some(Commands::Status) => lifecycle::check_status(&project_root),
         Some(Commands::Run) | None => {
             // Default: run in foreground
             run_foreground(project_root, cli.port).await

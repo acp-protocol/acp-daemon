@@ -29,9 +29,7 @@ dependencies = [
 
 [[package]]
 name = "acp-protocol"
-version = "0.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e955cc7a9692d85cc9eee72134d720ea5869ec7ed1964d8c266d5c9b270204e7"
+version = "0.6.0"
 dependencies = [
  "anyhow",
  "chrono",

@@ -1,6 +1,6 @@
 [package]
 name = "acp-daemon"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 authors = ["ACP Contributors"]
 description = "ACP Daemon - HTTP REST API for codebase intelligence"
@@ -15,8 +15,8 @@ path = "src/main.rs"
 
 [dependencies]
 # Core ACP library (use local path for development, version for release)
-acp = { path = "../acp-cli", package = "acp-protocol" }
-# acp = { version = "0.6.0", package = "acp-protocol" }
+# acp = { path = "../acp-cli", package = "acp-protocol" }
+acp = { version = "0.6.0", package = "acp-protocol" }
 
 # HTTP server
 axum = "0.8"
